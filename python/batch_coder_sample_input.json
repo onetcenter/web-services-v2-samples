@@ -1,0 +1,10 @@
+{ "config": {
+    "api_key": "my_web_services_api_key",
+    "max_results": 3
+  },
+  "queries": [
+    "Structural Engineer",
+    "Receptionist",
+    "Senior IT Manager"
+  ]
+}
