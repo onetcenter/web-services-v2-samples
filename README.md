@@ -1,4 +1,12 @@
-# O\*NET Web Services Code Samples
+# O\*NET Web Services (Version 2.0) Code Samples
+
+### Version 2.0 is currently in public beta!
+
+### [services-beta.onetcenter.org](https://services-beta.onetcenter.org/)</p>
+
+If you are using the stable version 1.9, visit the [Version 1.9 Code Samples](https://github.com/onetcenter/web-services-samples/) repository.
+
+---
 
 This repository contains utility functions and full working examples of logging into [O\*NET Web Services](https://services.onetcenter.org/) and calling APIs such as the keyword search.
 
