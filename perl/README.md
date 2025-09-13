@@ -43,7 +43,7 @@ The file `batch_coder_output.json` will contain the results.
 
 This sample code is licensed under the terms of the MIT license (see the `LICENSE` file for details).
 
-**Note:** O\*NET Web Services account holders must follow the [Terms of Service](https://services.onetcenter.org/terms) and [Data License](https://services.onetcenter.org/help/license_data) when calling the Services.
+**Note:** O\*NET Web Services account holders must follow the [Terms of Service](https://services-beta.onetcenter.org/terms) and [Data License](https://services-beta.onetcenter.org/help/license_data) when calling the Services.
 
 ## Contact
 

@@ -17,7 +17,7 @@ As a REST API, O\*NET Web Services may be called from any language using standar
 ### Server-side languages
 
 * C# (.NET 6.0 or later)
-* NodeJS (7.6 or later)
+* NodeJS (18.0 or later)
 * Perl (5.10 or later)
 * PHP (5.6.x or later)
 * Python (3.x or later)
@@ -31,7 +31,7 @@ As a REST API, O\*NET Web Services may be called from any language using standar
 
 This sample code is licensed under the terms of the MIT license (see the `LICENSE` file for details).
 
-**Note:** O\*NET Web Services account holders must follow the [Terms of Service](https://services.onetcenter.org/terms) and [Data License](https://services.onetcenter.org/help/license_data) when calling the Services.
+**Note:** O\*NET Web Services account holders must follow the [Terms of Service](https://services-beta.onetcenter.org/terms) and [Data License](https://services-beta.onetcenter.org/help/license_data) when calling the Services.
 
 ## Legacy versions
 
