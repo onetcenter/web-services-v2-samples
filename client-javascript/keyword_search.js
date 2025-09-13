@@ -45,16 +45,9 @@ function reset_error() {
 }
 
 function init_keyword_search_js() {
-  fill_element('domainOrigin', document.location.protocol + '//' + document.location.host);
   reset_error();
   hide_element('connectSuccess');
   hide_element('searchSuccess');
-  
-  if (document.location.protocol != 'http:' && document.location.protocol != 'https:') {
-    show_error('You must run this demo from an HTTP or HTTPS server.');
-    hide_element('accountForm');
-    return;
-  }
   
   attach_event('accountForm', 'submit', function(e) {
     e.preventDefault();
@@ -70,12 +63,16 @@ function init_keyword_search_js() {
     
     onet_ws = new OnetWebService(api_key);
     disable_button('accountConnect');
-    onet_ws.call('about', null, function(vinfo) {
-      enable_button('accountConnect');
-      if (check_for_error(vinfo)) { return; }
-      
+    onet_ws.call('about')
+    .then((vinfo) => {
       fill_element('connectVersion', vinfo.api_version);
       show_element('connectSuccess');
+    })
+    .catch((error) => {
+      show_error(error);
+    })
+    .finally(() => {
+      enable_button('accountConnect');
     });
   });
   
@@ -94,10 +91,8 @@ function init_keyword_search_js() {
     }
     
     disable_button('searchSubmit');
-    onet_ws.call('online/search', { keyword: kwquery, end: 5 }, function(kwresults) {
-      enable_button('searchSubmit');
-      if (check_for_error(kwresults)) { return; }
-      
+    onet_ws.call('online/search', { keyword: kwquery, end: 5 })
+    .then((kwresults) => {
       fill_element('searchQueryEcho', kwquery);
       if (!kwresults.hasOwnProperty('occupation') || !kwresults.occupation.length) {
         show_element('searchNoResults');
@@ -114,6 +109,12 @@ function init_keyword_search_js() {
         show_element('searchResults');
       }
       show_element('searchSuccess');
+    })
+    .catch((error) => {
+      show_error(error);
+    })
+    .finally(() => {
+      enable_button('searchSubmit');
     });
   });
 }

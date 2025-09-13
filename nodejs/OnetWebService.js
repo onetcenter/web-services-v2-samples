@@ -1,60 +1,66 @@
-"use strict"
-const axios = require('axios')
-const querystring = require('querystring')
+"use strict";
 
 class OnetWebService {
   constructor(api_key) {
     this._config = {
-      method: 'get',
-      headers: {
-        'User-Agent': 'nodejs-OnetWebService/2.00 (bot)',
-        'X-API-Key': api_key,
-        'Accept': 'application/json'
-      },
-      timeout: 10000,
-      maxRedirects: 0
-    }
-    this.set_version()
+      api_key: api_key
+    };
+    this.set_version();
   }
-  
+
   set_version(version) {
     if (version === undefined) {
-      this._config.baseURL = 'https://api-v2.onetcenter.org/'
+      this._config.baseURL = 'https://api-v2.onetcenter.org/';
     } else {
-      this._config.baseURL = 'https://api-v' + version + '.onetcenter.org/'
+      this._config.baseURL = 'https://api-v' + version + '.onetcenter.org/';
     }
   }
-  
-  async call(path, query) {
-    const config = Object.assign({}, this._config)
-    if (query === undefined) {
-      config.url = path
-    } else {
-      config.url = path + '?' + querystring.stringify(query)
-    }
-    
-    let result = { error: 'Call to ' + config.baseURL + config.url + ' failed with unknown reason' }
-    try {
-      const response = await axios(config)
-      if (response.status == 200) {
-        result = response.data
-      } else {
-        result = { error: 'Call to ' + config.baseURL + config.url + ' failed with error code ' + response.status }
-      }
-    } catch (error) {
-      if (error.response) {
-        if (error.response.status == 422) {
-          result = error.response.data
-        } else {
-          result = { error: 'Call to ' + config.baseURL + config.url + ' failed with error code ' + error.response.status }
+
+  _encode_query(query) {
+    let params = new URLSearchParams();
+    for (const key of Object.keys(query)) {
+      const val = query[key];
+      if (Array.isArray(val)) {
+        for (const v of val) {
+          params.append(key, v);
         }
-      } else if (error.request) {
-        result = { error: 'Call to ' + config.baseURL + config.url + ' failed with no response from server' }
-      } else if (error.message) {
-        result = { error: 'Call to ' + config.baseURL + config.url + 'failed with reason: ' + error.message }
+      } else {
+        params.append(key, val);
       }
     }
-    return result
+    return params.toString();
+  }
+
+  call(path, query) {
+    let url = this._config.baseURL + path;
+    if (query !== null && query !== undefined) {
+      url += '?' + this._encode_query(query);
+    }
+    return new Promise((resolve, reject) => {
+      fetch(url, {
+        method: 'GET',
+        headers: {
+          'X-API-Key': this._config.api_key,
+          'User-Agent': 'nodejs-OnetWebService/2.10 (bot)'
+        }
+      })
+      .then((response) => {
+        if (response.status == 200 || response.status == 422) {
+          response.json()
+            .then((data) => Object.hasOwn(data, 'error') ? reject(data.error) : resolve(data))
+            .catch((error) => reject(`Call to ${url} failed on JSON parse`));
+        } else {
+          reject(`Call to ${url} failed with error code ${response.status}`);
+        }
+      })
+      .catch((error) => {
+        if (error.message) {
+          reject(`Call to ${url} failed with reason: ${error.message}`);
+        } else {
+          reject(`Call to ${url} failed with unknown reason`);
+        }
+      });
+    });
   }
 }
 
