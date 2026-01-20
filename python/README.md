@@ -14,7 +14,7 @@ Clone the sample code repository:
 
 Change to the Python directory:
 
-    cd web-services-v2-samples/python-3
+    cd web-services-v2-samples/python
 
 ### Interactive keyword search example
 
